@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Render Keep Alive</title>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: #111;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      font-family: Arial, sans-serif;
+    }
+
+    .dot {
+      width: 20px;
+      height: 20px;
+      background: #61dafb;
+      border-radius: 50%;
+      margin-top: 20px;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      50% {
+        transform: scale(1.5);
+        opacity: 0.5;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Chat App Server Keep Alive</h1>
+
+  <p id="status">Starting...</p>
+
+  <div class="dot"></div>
+
+  <script>
+    // Your Render Health API
+    const SERVER_URL = "https://chat-app-hwvk.onrender.com/health";
+
+    async function pingServer() {
+      try {
+        const response = await fetch(SERVER_URL);
+
+        document.getElementById("status").innerText =
+          "Last Ping: " +
+          new Date().toLocaleTimeString() +
+          " | Status: " +
+          response.status;
+
+        console.log(
+          "Ping Success:",
+          new Date().toLocaleTimeString()
+        );
+
+      } catch (error) {
+
+        document.getElementById("status").innerText =
+          "Ping Failed";
+
+        console.error("Ping Error:", error);
+      }
+    }
+
+    // First ping immediately
+    pingServer();
+
+    // Ping every 14 minutes
+    setInterval(pingServer, 14 * 60 * 1000);
+  </script>
+
+</body>
+
+</html>
